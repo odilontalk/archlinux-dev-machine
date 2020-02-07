@@ -1,121 +1,21 @@
-useradd -m -g users -G wheel -s /bin/bash dilas
-cp /etc/skel/.bashrc /home/dilas
-
-
-pacman --noconfirm -S vim ctags
-
-chown -R dilas:users /home/dilas
-
-pacman --noconfirm -S sudo
-
-sed -i '/%wheel ALL=(ALL) NOPASSWD: ALL/s/^#//' /etc/sudoers
-
-echo "" >> /etc/sudoers
-echo 'Defaults !requiretty, !tty_tickets, !umask' >> /etc/sudoers
-echo 'Defaults visiblepw, path_info, insults, lecture=always' >> /etc/sudoers
-echo 'Defaults loglinelen=0, logfile =/var/log/sudo.log, log_year, log_host, syslog=auth' >> /etc/sudoers
-echo 'Defaults passwd_tries=3, passwd_timeout=1' >> /etc/sudoers
-echo 'Defaults env_reset, always_set_home, set_home, set_logname' >> /etc/sudoers
-echo 'Defaults !env_editor, editor="/usr/bin/vim:/usr/bin/vi:/usr/bin/nano"' >> /etc/sudoers
-echo 'Defaults timestamp_timeout=15' >> /etc/sudoers
-echo 'Defaults passprompt="[sudo] password for %u: "' >> /etc/sudoers
-echo 'Defaults lecture=never' >> /etc/sudoers
-
-pacman --noconfirm -S base-devel git go
-pacman -D --asdeps go
-
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-
-pacman --noconfirm -S bc rsync mlocate bash-completion pkgstats arch-wiki-lite
-pacman --noconfirm -S zip unzip unrar p7zip lzop cpio
-pacman --noconfirm -S avahi nss-mdns
-pacman --noconfirm -S alsa-utils alsa-plugins
-pacman --noconfirm -S pulseaudio pulseaudio-alsa
-pacman --noconfirm -S ntfs-3g dosfstools exfat-utils f2fs-tools fuse fuse-exfat autofs mtpfs
-pacman --noconfirm -S tlp
-pacman --noconfirm -S xorg-server xorg-apps xorg-xinit xorg-xkill xorg-xinput xf86-input-libinput
-pacman --noconfirm -S mesa
-pacman --noconfirm -S weston xorg-server-xwayland
-pacman -S --asdeps --needed cairo fontconfig freetype2
-pacman --noconfirm -S dmidecode
-pacman --noconfirm -S xf86-video-nouveau mesa-libgl libvdpau-va-glp
-pacman --noconfirm -S xf86-video-intel mesa-libgl libvdpau-va-gl
-pacman --noconfirm -S lib32-mesa-libgl lib32-mesa-vdpau
-pacman --noconfirm -S cups cups-pdf
-pacman --noconfirm -S gutenprint ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds foomatic-db-nonfree-ppds foomatic-db-gutenprint-ppds
-pacman --noconfirm -S gdm
-pacman --noconfirm -S gnome gnome-extra gnome-software
-pacman --noconfirm -S deja-dup gedit-plugins gpaste gnome-tweak-tool gnome-power-manager
-pacman --noconfirm -S nautilus-share
-pacman --noconfirm -R aisleriot atomix four-in-a-row five-or-more gnome-2048 gnome-chess gnome-klotski gnome-mahjongg gnome-mines gnome-nibbles gnome-robots gnome-sudoku gnome-tetravex gnome-taquin swell-foop hitori iagno quadrapassel lightsoff tali
-pacman --noconfirm -S gvfs gvfs-goa gvfs-afc gvfs-mtp gvfs-google
-pacman --noconfirm -S xdg-user-dirs-gtk
-pacman --noconfirm -S pavucontrol
-pacman --noconfirm -S ttf-bitstream-vera ttf-dejavu
-pacman --noconfirm -S system-config-printer gtk3-print-backends
-pacman --noconfirm -S networkmanager dnsmasq networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc
-pacman --noconfirm -S bluez bluez-utils
-pacman --noconfirm -S jdk8-openjdk
-pacman --noconfirm -S libreoffice-fresh
-pacman --noconfirm -S hunspell hunspell-en
-pacman --noconfirm -S aspell aspell-en
-pacman --noconfirm -S docker
-pacman --noconfirm -S htop
-pacman --noconfirm -S virtualbox virtualbox-host-dkms virtualbox-guest-iso linux-headers
-pacman --noconfirm -S firefox firefox-i18n-en
-pacman --noconfirm -S qbittorrent
-pacman --noconfirm -S remmina
-pacman --noconfirm -S pragha
-pacman --noconfirm -S gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
-pacman --noconfirm -S vlc
-pacman --noconfirm -S libdvdnav libdvdcss cdrdao cdrtools ffmpeg ffmpegthumbnailer ffmpegthumbs
-pacman --noconfirm -S ttf-dejavu ttf-fira-code ttf-liberation ttf-bitstream-vera ttf-hack noto-fonts-emoji
-pacman --noconfirm -S z
-
-yay --noconfirm -S gnome-defaults-list
-yay --noconfirm -S jetbrains-toolbox
-yay --noconfirm -S visual-studio-code-bin
-yay --noconfirm -S postman-bin
-yay --noconfirm -S virtualbox-ext-oracle
-yay --noconfirm -S google-chrome
-yay --noconfirm -S ttf-mac-fonts
-yay --noconfirm -S ttf-ms-fonts
-
-add_user_to_group ${username} docker
-add_user_to_group ${username} vboxusers
-
 run_as_user "gconftool-2 --type string --set /system/gstreamer/0.10/audio/profiles/mp3/pipeline \audio/x-raw-int,rate=44100,channels=2 ! lame name=enc preset=1001 ! id3v2mux\""
 
-cp -fv /etc/X11/xinit/xinitrc /home/dilas/.xinitrc
-echo -e "exec gnome-session" >> /home/dilas/.xinitrc
 chown -R dilas:users /home/dilas/.xinitrc
 
 replace_line '#*options nouveau modeset=1' 'options nouveau modeset=1' /etc/modprobe.d/modprobe.conf
 replace_line '#*MODULES="nouveau"' 'MODULES="nouveau"' /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
-timedatectl set-ntp true
-systemctl enable avahi-daemon.service
-systemctl enable tlp.service
-systemctl enable tlp-sleep.service
-systemctl enable org.cups.cupsd.service
-systemctl enable gdm
-systemctl enable NetworkManager.service
-systemctl enable bluetooth.service
-systemctl mask systemd-rfkill.service
-systemctl mask systemd-rfkill.socket
+
 
 modprobe vboxdrv vboxnetflt
-tlp start
+
 
 
 pacman -Rsc --noconfirm $(pacman -Qqdt)
 
-sudo tee /etc/modprobe.d/blacklist-ideapad.conf <<< "blacklist ideapad_laptop"
-sudo tee /etc/modprobe.d/blacklist-nouveau.conf <<< "blacklist nouveau"
-gsettings set org.gnome.software download-updates false
+
+
 
 /usr/lib/gtk-3.0/3.0.0/immodules.cache
 /usr/lib/gtk-2.0/2.10.0/immodules.cache
