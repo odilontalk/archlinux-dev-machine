@@ -5,7 +5,8 @@ loadkeys "us"
 timedatectl set-timezone America/Sao_Paulo
 timedatectl set-ntp true
 
-echo "Server = http://archlinux.c3sl.ufpr.br/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
+echo "Server = http://linorg.usp.br/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist 
+echo "Server = http://archlinux.c3sl.ufpr.br/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist
 
 sgdisk --zap-all /dev/nvme0n1
 printf "n\n1\n\n+250M\nef00\nn\n2\n\n+10G\n8300\nn\n3\n\n\n8200\nw\ny\n" | gdisk /dev/nvme0n1
@@ -36,3 +37,5 @@ pacman --noconfirm -S grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 EOF
+
+
